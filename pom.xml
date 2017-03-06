@@ -17,30 +17,41 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+
+                <plugin>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.0.2</version>
+                    <executions>
+                        <execution>
+                            <id>copy-resources</id>
+                            <!-- here the phase you need -->
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>copy-resources</goal>
+                            </goals>
+                            <configuration>
+                                <outputDirectory>${basedir}/target</outputDirectory>
+                                <resources>
+                                    <resource>
+                                        <directory>src/recouces</directory>
+                                        <filtering>true</filtering>
+                                    </resource>
+                                </resources>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+
         </plugins>
 
 
 
-        <resources>
-            <!-- regular resource processsing for everything except logback.xml -->
-            <resource>
-                <directory>src/main/resources</directory>
-                <excludes>
-                    <exclude>cities15000.txt</exclude>
-                </excludes>
-            </resource>
-            <!-- resource processsing with a different output directory
-                 for logback.xml -->
-            <resource>
-                <directory>src/main/resources</directory>
-                <includes>
-                    <include>cities15000.txt</include>
-                </includes>
-                <!-- relative to target/classes
-                     i.e. ${project.build.outputDirectory} -->
-                <targetPath>..</targetPath>
-            </resource>
-        </resources>
 
     </build>
 

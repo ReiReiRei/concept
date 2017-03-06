@@ -107,12 +107,15 @@ class Annotator {
         }
 
         int startIndex = text.indexOf(annotation.getCoveredText());
+        if(startIndex == -1) {
+            return null;
+        }
         annotations.add(new GeoAnnotation(annotation.getGeonameid(), annotation.getName(), annotation.getCoveredText(), startIndex, startIndex + annotation.getCoveredText().length(), 1));
         int nextIndex = startIndex + 1;
         nextIndex = text.indexOf(annotation.getCoveredText(), nextIndex);
         while (nextIndex < text.length() && nextIndex > 0) {
             nextIndex = text.indexOf(annotation.getCoveredText(), nextIndex);
-            if (nextIndex < 0) break;
+            if (nextIndex == -1) break;
             annotations.add(new GeoAnnotation(annotation.getGeonameid(), annotation.getName(), annotation.getCoveredText(), nextIndex, nextIndex + annotation.getCoveredText().length(), 1));
             nextIndex++;
         }

@@ -2,21 +2,48 @@ package org.conept;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.PostConstruct;
+import java.io.File;
+import java.io.IOException;
 import java.util.Vector;
 
 import static org.conept.Annotator.AnnotatorType.altername;
 import static org.conept.Annotator.AnnotatorType.lowercase;
 
+class IndexLoader {
+    private ClassLoader classLoader = getClass().getClassLoader();
+    private File file = new File("cities15000.txt");
+    private final ConceptIndex index = new ConceptIndex(file.toPath());
+
+    IndexLoader() throws IOException {
+    }
+
+
+    public ConceptIndex getIndex() {
+        return index;
+    }
+}
+
 @Controller
 @EnableAutoConfiguration
 public class ConceptController {
 
-    private final static ConceptIndex index = new ConceptIndex("C:\\education\\projects\\concept\\src\\main\\resources\\cities15000.txt");
+    private ConceptIndex index;
+
+    @PostConstruct
+    public void init() {
+        try {
+            index = (new IndexLoader()).getIndex();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @RequestMapping("/")
     @ResponseBody

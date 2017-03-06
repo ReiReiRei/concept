@@ -2,11 +2,20 @@ package org.conept;
 
 
 import org.apache.log4j.Logger;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.shingle.ShingleFilter;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.SyncFailedException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.Vector;
 import java.util.stream.Stream;
 
 
@@ -23,9 +32,9 @@ public class ConceptIndex {
     private static final Logger log = Logger.getLogger(ConceptIndex.class
             .getName());
 
-    ConceptIndex(String indexerPath) {
+    ConceptIndex(Path path) {
 
-        try (Stream<String> stream = Files.lines(Paths.get(indexerPath))) {
+        try (Stream<String> stream = Files.lines(path)) {
             stream.map(this::parseLocation).forEach(location -> getIdIndex().put(location.getId(), location));
         } catch (IOException e) {
             e.printStackTrace();
